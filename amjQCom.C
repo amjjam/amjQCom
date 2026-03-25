@@ -324,7 +324,7 @@ namespace amjQCom {
 
   void ClientStatus::setMaxHistory(int n) { _impl->maxEntries= n; }
 
-  void ClientStatus::pushStatus(const amjCom::Status &status) {
+  void ClientStatus::pushStatus(const amjCom::Status status) {
     emit statusReceived(status);
   }
   //  new QLabel(title, parent));

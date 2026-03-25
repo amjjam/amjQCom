@@ -23,7 +23,7 @@ namespace amjQCom {
     explicit ClientStatus(QWidget *parent= nullptr);
     virtual ~ClientStatus();
 
-    void pushStatus(const amjCom::Status &status);
+    void pushStatus(const amjCom::Status status);
     void setMaxHistory(int n);
 
   signals:
