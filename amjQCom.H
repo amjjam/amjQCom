@@ -3,6 +3,7 @@
 
 #include <QMetaType>
 #include <QWidget>
+#include <QSharedPointer>
 
 // Forward declare your Status class
 namespace amjCom {
@@ -23,11 +24,11 @@ namespace amjQCom {
     explicit ClientStatus(QWidget *parent= nullptr);
     virtual ~ClientStatus();
 
-    void pushStatus(const amjCom::Status status);
+    void pushStatus(amjCom::Status status);
     void setMaxHistory(int n);
 
   signals:
-    void statusReceived(const amjCom::Status status);
+    void statusReceived(QSharedPointer<amjCom::Status> status);
 
   protected:
     void mousePressEvent(QMouseEvent *event) override;

@@ -254,17 +254,27 @@ namespace amjQCom {
 
     // ------------------------------------------------------
 
-    void handleStatus(const amjCom::Status &status) {
+    void handleStatus(const amjCom::Status status) {
       StatusEntry e;
 
+      std::cout << "handlestatus: s: " << status.state() << " e: "
+		<< status.error() << std::endl;
       e.time= QDateTime::currentDateTime();
       e.firstTime= e.time;
       e.lastTime= e.time;
 
-      e.stateDescription= QString::fromStdString(status.statedescription());
+      int state=status.state();
+      if(state>=amjCom::statedescriptions.size()||state<0)
+	e.stateDescription="Invalid State";
+      else
+	e.stateDescription= QString::fromStdString(status.statedescription());
 
-      QString errorDesc
-        = QString::fromStdString(amjCom::errordescriptions[status.error()]);
+      QString errorDesc;
+      int error=status.error();
+      if(error>=amjCom::errordescriptions.size()||error<0)
+	errorDesc="Invalid error";
+      else
+        errorDesc = QString::fromStdString(amjCom::errordescriptions[status.error()]);
 
       QString errorMsg= QString::fromStdString(status.errormessage());
 
@@ -308,13 +318,13 @@ namespace amjQCom {
 
     static bool registered= false;
     if(!registered) {
-      qRegisterMetaType<amjCom::Status>("amjCom::Status");
+      qRegisterMetaType<QSharedPointer<amjCom::Status> >("QSharedPointer<amjCom::Status>");
       registered= true;
     }
 
     connect(
       this, &ClientStatus::statusReceived, this,
-      [this](amjCom::Status status) { _impl->handleStatus(status); },
+      [this](QSharedPointer<amjCom::Status> status) { _impl->handleStatus(*status); },
       Qt::QueuedConnection);
 
     qApp->installEventFilter(this);
@@ -325,7 +335,8 @@ namespace amjQCom {
   void ClientStatus::setMaxHistory(int n) { _impl->maxEntries= n; }
 
   void ClientStatus::pushStatus(const amjCom::Status status) {
-    emit statusReceived(status);
+    auto statusPtr=QSharedPointer<amjCom::Status>::create(status);
+    emit statusReceived(statusPtr);
   }
   //  new QLabel(title, parent));
   // ------------------------------------------------------
