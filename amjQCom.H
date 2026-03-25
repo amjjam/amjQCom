@@ -27,7 +27,7 @@ namespace amjQCom {
     void setMaxHistory(int n);
 
   signals:
-    void statusReceived(const amjCom::Status &status);
+    void statusReceived(const amjCom::Status status);
 
   protected:
     void mousePressEvent(QMouseEvent *event) override;
