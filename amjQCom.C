@@ -314,7 +314,7 @@ namespace amjQCom {
 
     connect(
       this, &ClientStatus::statusReceived, this,
-      [this](const amjCom::Status &status) { _impl->handleStatus(status); },
+      [this](amjCom::Status status) { _impl->handleStatus(status); },
       Qt::QueuedConnection);
 
     qApp->installEventFilter(this);
